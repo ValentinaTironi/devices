@@ -1,0 +1,17 @@
+<h1>Listing devices</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>mac address</th>
+  </tr>
+
+  <% @device.each do |device| %>
+    <tr>
+      <td><%= device.name %></td>
+      <td><%= device.mac_address %></td>
+      <td><%= link_to 'Show', device_path(device) %></td>
+      <td><%= link_to 'Edit', edit_device_path(device) %></td>      
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,18 @@
+<h1>New device</h1>
+<div>
+  <%= form_with scope: :device, url: devices_path, local: true do |form| %>
+    <div>
+      <%= form.label :name %><br>
+      <%= form.text_field :name %>
+    </div>
+
+    <div>
+      <%= form.label :mac_address %><br>
+      <%= form.number_field :mac_address %>
+    </div>
+
+    <div>
+      <%= form.submit %>
+    <div>
+  <% end %>
+</div>

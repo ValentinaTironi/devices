@@ -2,33 +2,81 @@ require 'rails_helper'
 
 describe DevicesController, 'Devices Controller' do
 
-  describe 'GET #show' do
+  let(:device_class) { Device }
 
-    subject { create(:device) }
+  describe 'GET #index' do
 
-    it 'assigns the requested device to @device' do
-      get :show, params: { id: subject.id }
-      expect(assigns(:device)).to eq(subject)
+    let(:devices) { [create(:device, :name_valid)] }
+
+    before do
+      get :index
     end
 
-    it 'renders the show template' do
-      get :show, params: { id: subject.id }
-      expect(response).to render_template('show')
+    it { expect(response).to have_http_status(:success) }
+
+    it 'get all devices' do
+      expect(assigns(:devices)).to match_array(devices)
+    end
+
+    it 'renders the :index view' do
+      expect(response).to render_template(:index)
+    end
+  end
+
+  describe 'GET #show' do
+
+    context 'valid id' do
+
+      subject { create(:device, :name_valid) }
+
+      before do
+        get :show, params: { id: subject.id }
+      end
+
+      it { expect(response).to have_http_status(:success) }
+
+      it 'assigns the requested device to @device' do
+        expect(assigns(:device)).to eq(subject)
+      end
+
+      it 'renders the show template' do
+        expect(response).to render_template('show')
+      end
+    end
+
+    context 'invalid id' do
+
+      let(:id) { 'invalid_id' }
+
+      before do
+        get :show, params: { id: id }
+      end
+
+      it 'return a error' do
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'renders the show template' do
+        expect(response).to render_template('not_found')
+      end
+
     end
   end
 
   describe 'GET #new' do
 
-    let(:device_class) { Device }
+    before do
+      get :new
+    end
+
+    it { expect(response).to have_http_status(:success) }
 
     it 'assigns a new Device to @device' do
-      get :new
       expect(assigns(:device)).to be_a(device_class)
     end
 
     it 'renders the new template' do
-      get :new
-      response.should render_template('new')
+      expect(response).to render_template(:new)
     end
   end
 
@@ -36,7 +84,11 @@ describe DevicesController, 'Devices Controller' do
 
     context 'with valid attributes' do
 
-      let(:device) { attributes_for(:device) }
+      let(:device) { attributes_for(:device, :name_valid) }
+
+      before do
+        post :create, params: { device: device }
+      end
 
       it 'creates a new device' do
         expect { post :create, params: { device: device } }
@@ -44,14 +96,22 @@ describe DevicesController, 'Devices Controller' do
       end
 
       it 'redirects to the new device' do
-        post :create, params: { device: device }
         expect(:device).to redirect_to(Device.last)
       end
+
+      it 'return 302 status' do
+         expect(response).to have_http_status(:found)
+      end
+
     end
 
     context 'with invalid attributes' do
 
-      let(:invalid_device) { attributes_for(:invalid_device) }
+      let(:invalid_device) { attributes_for(:device, :name_invalid) }
+
+      before do
+        post :create, params: { device: invalid_device }
+      end
 
       it 'does not create a new device' do
         expect { post :create, params: { device: invalid_device } }
@@ -59,9 +119,13 @@ describe DevicesController, 'Devices Controller' do
       end
 
       it 'renders to new template' do
-        post :create, params: { device: invalid_device }
         expect(response).to render_template('new')
+      end
+
+      it 'return 422 status' do
+         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
+
 end

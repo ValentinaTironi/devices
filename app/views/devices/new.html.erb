@@ -1,0 +1,8 @@
+<h1>New device</h1>
+<div>
+<%= form_for @device do |d| %>
+  <label>Name: </label> <%= d.text_field :name %>
+  <label>Mac address: </label><%= d.number_field :mac_address %>
+  <%= d.submit %>
+<% end %>
+</div>

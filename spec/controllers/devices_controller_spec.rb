@@ -214,4 +214,19 @@ describe DevicesController, 'Devices Controller' do
       end
     end
   end
+
+  describe 'DELETE destroy' do
+
+    subject { create(:device, :name_valid) }
+
+    before { delete :destroy, params: { id: subject.id } }
+
+    it 'redirects to devices#index' do
+      expect(response).to redirect_to devices_path
+    end
+
+    it 'return 302 status (found)' do
+      expect(response).to have_http_status(:found)
+    end
+  end
 end

@@ -30,6 +30,12 @@ class DevicesController < ApplicationController
     end
   end
 
+  def destroy
+    @device = Device.find(params[:id])
+    @device.destroy
+    redirect_to devices_path
+  end
+
   private
 
   def device_params

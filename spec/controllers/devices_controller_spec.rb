@@ -80,6 +80,46 @@ describe DevicesController, 'Devices Controller' do
     end
   end
 
+  describe 'GET #edit' do
+
+    context 'valid id' do
+
+      subject { create(:device, :name_valid) }
+
+      before do
+        get :edit, params: { id: subject.id }
+      end
+
+      it { expect(response).to have_http_status(:success) }
+
+      it 'assigns the requested device to @device' do
+        expect(assigns(:device)).to eq(subject)
+      end
+
+      it 'renders the edit template' do
+        expect(response).to render_template('edit')
+      end
+    end
+
+    context 'invalid id' do
+
+      let(:id) { 'invalid_id' }
+
+      before do
+        get :edit, params: { id: id }
+      end
+
+      it 'return a error' do
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it 'renders the show template' do
+        expect(response).to render_template('not_found')
+      end
+
+    end
+  end
+
   describe 'POST #create' do
 
     context 'with valid attributes' do
@@ -92,17 +132,16 @@ describe DevicesController, 'Devices Controller' do
 
       it 'creates a new device' do
         expect { post :create, params: { device: device } }
-          .to change(Device, :count).by(1)
+          .to change(device_class, :count).by(1)
       end
 
       it 'redirects to the new device' do
-        expect(:device).to redirect_to(Device.last)
+        expect(:device).to redirect_to(device_class.last)
       end
 
       it 'return 302 status' do
-         expect(response).to have_http_status(:found)
+        expect(response).to have_http_status(:found)
       end
-
     end
 
     context 'with invalid attributes' do
@@ -115,7 +154,7 @@ describe DevicesController, 'Devices Controller' do
 
       it 'does not create a new device' do
         expect { post :create, params: { device: invalid_device } }
-          .to change(Device, :count).by(0)
+          .to change(device_class, :count).by(0)
       end
 
       it 'renders to new template' do
@@ -123,9 +162,77 @@ describe DevicesController, 'Devices Controller' do
       end
 
       it 'return 422 status' do
-         expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
 
+  describe 'PUT #update' do
+
+    subject { create(:device, :name_valid) }
+
+    context 'valid attributes' do
+
+      let(:attributes) { { name: 'new name', mac_address: 111 } }
+
+      before do
+        patch :update, params: { id: subject.id, device: attributes }
+      end
+
+      it 'update data success' do
+        subject.reload
+        expect(subject.name).to eq('new name')
+      end
+
+      it 'return 302 status (found)' do
+        expect(response).to have_http_status(:found)
+      end
+
+      it 'assigns the requested device to @device' do
+        expect(assigns(:device)).to eq(subject)
+      end
+
+      it 'redirects to the device' do
+        expect(:device).to redirect_to(subject)
+      end
+    end
+
+    context 'invalid attributes' do
+
+      let(:attributes) { { name: 'new name', mac_address: nil } }
+
+      before do
+        patch :update, params: { id: subject.id, device: attributes }
+      end
+
+      it 'renders to edit template' do
+        expect(response).to render_template(:edit)
+      end
+
+      it 'return 422 status' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe 'DELETE destroy' do
+
+    let!(:device) { create(:device, :name_valid) }
+
+    let(:delete_device) { delete :destroy, params: { id: device.id } }
+
+    it 'delete device success' do
+      expect { delete_device }.to change(device_class, :count).by(-1)
+    end
+
+    it 'redirects to devices#index' do
+      delete_device
+      expect(response).to redirect_to devices_path
+    end
+
+    it 'return 302 status (found)' do
+      delete_device
+      expect(response).to have_http_status(:found)
+    end
+  end
 end

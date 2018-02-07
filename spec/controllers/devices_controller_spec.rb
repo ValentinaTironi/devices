@@ -132,11 +132,11 @@ describe DevicesController, 'Devices Controller' do
 
       it 'creates a new device' do
         expect { post :create, params: { device: device } }
-          .to change(Device, :count).by(1)
+          .to change(device_class, :count).by(1)
       end
 
       it 'redirects to the new device' do
-        expect(:device).to redirect_to(Device.last)
+        expect(:device).to redirect_to(device_class.last)
       end
 
       it 'return 302 status' do
@@ -154,7 +154,7 @@ describe DevicesController, 'Devices Controller' do
 
       it 'does not create a new device' do
         expect { post :create, params: { device: invalid_device } }
-          .to change(Device, :count).by(0)
+          .to change(device_class, :count).by(0)
       end
 
       it 'renders to new template' do
@@ -217,15 +217,21 @@ describe DevicesController, 'Devices Controller' do
 
   describe 'DELETE destroy' do
 
-    subject { create(:device, :name_valid) }
+    let!(:device) { create(:device, :name_valid) }
 
-    before { delete :destroy, params: { id: subject.id } }
+    let(:delete_device) { delete :destroy, params: { id: device.id } }
+
+    it 'delete device success' do
+      expect { delete_device }.to change(device_class, :count).by(-1)
+    end
 
     it 'redirects to devices#index' do
+      delete_device
       expect(response).to redirect_to devices_path
     end
 
     it 'return 302 status (found)' do
+      delete_device
       expect(response).to have_http_status(:found)
     end
   end

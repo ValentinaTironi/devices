@@ -1,5 +1,5 @@
 class DevicesController < ApplicationController
-  before_action :find_device, only: [:show, :edit, :update]
+  before_action :find_device, only: [:show, :edit, :update, :destroy]
 
   def index
     @devices = Device.all
@@ -31,8 +31,7 @@ class DevicesController < ApplicationController
   end
 
   def destroy
-    @device = Device.find(params[:id])
-    @device.destroy
+    @device.destroy!
     redirect_to devices_path
   end
 

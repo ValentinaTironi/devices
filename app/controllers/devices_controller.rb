@@ -1,5 +1,5 @@
 class DevicesController < ApplicationController
-  before_action :find_device, only: [:show, :edit, :update]
+  before_action :find_device, only: [:show, :edit, :update, :destroy]
 
   def index
     @devices = Device.all
@@ -28,6 +28,11 @@ class DevicesController < ApplicationController
     else
       render 'edit', status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @device.destroy!
+    redirect_to devices_path
   end
 
   private

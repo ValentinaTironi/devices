@@ -179,6 +179,11 @@ describe DevicesController, 'Devices Controller' do
         patch :update, params: { id: subject.id, device: attributes }
       end
 
+      it 'update data success' do
+        subject.reload
+        expect(subject.name).to eq('new name')
+      end
+
       it 'return 302 status (found)' do
         expect(response).to have_http_status(:found)
       end

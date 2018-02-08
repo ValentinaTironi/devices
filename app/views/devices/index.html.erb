@@ -1,23 +1,37 @@
-<div>
-  <table>
-    <tr>
+<div class="row mt-4">
+  <div class="col-sm-10">
+    <h1 class="text-center background">Devices</h1>
+  </div>
+  <div class="col-sm-2 mt-2">
+    <%= button_to('New',
+          new_device_path,
+          method: :get,
+          class: "btn btn-outline-info float-right new-button") %>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table table-hover table-sm">
+    <thead class="thead">
       <th>Name</th>
       <th>Mac address</th>
       <th>Code</th>
-    </tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </thead>
 
     <% @devices.each do |d| %>
-    <tr>
-      <td><%= d.name %></td>
-      <td><%= d.mac_address %></td>
-      <td><%= d.code %></td>
-      <td><%= link_to 'Show', device_path(d) %></td>
-      <td><%= link_to 'Edit', edit_device_path(d) %></td>
-      <td><%= link_to 'Destroy', device_path(d),
-              method: :delete, 
-              data: { confirm: 'Are you sure?' } %></td>
-    </tr>
+      <tr>
+        <td><%= d.name %></td>
+        <td><%= d.mac_address %></td>
+        <td><%= d.code.truncate(15) %></td>
+        <td><%= link_to '<i class="ion-eye">'.html_safe, device_path(d) %></td>
+        <td><%= link_to '<i class="ion-edit">'.html_safe, edit_device_path(d) %></td>
+        <td><%= link_to '<i class="ion-trash-a">'.html_safe,
+                device_path(d),
+                method: :delete,
+                data: { confirm: 'Are you sure?' } %></td>
+      </tr>
     <% end %>
   </table>
-  <td><%= link_to 'New', new_device_path %></td>
 </div>

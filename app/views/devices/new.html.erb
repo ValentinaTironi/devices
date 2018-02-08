@@ -1,8 +1,24 @@
-<h1>New device</h1>
-<div>
-<%= form_for @device do |d| %>
-  <label>Name: </label> <%= d.text_field :name %>
-  <label>Mac address: </label><%= d.number_field :mac_address %>
-  <%= d.submit %>
-<% end %>
+<div class="col-md-6 offset-md-3 card mt-4">
+  <div class="card-header bg-transparent">
+    <h1>New device</h1>
+  </div>
+  <div class="card-body">
+    <%= form_for @device do |d| %>
+
+      <div class="form-group">
+        <label class="font-weight-bold">Name: </label>
+        <%= d.text_field :name, class: "form-control"%>
+      </div>
+
+      <div class="form-group">
+        <label class="font-weight-bold">Mac address: </label>
+        <%= d.number_field :mac_address, class: "form-control" %>
+      </div>
+
+      <div class="float-right row">
+        <%= d.submit 'Save', class: "btn btn-outline-info" %>
+    <% end %>
+    <%= button_to('Cancel', devices_path, method: :get, class: "btn btn-outline-danger ml-1") %>
+      </div>
+  </div>
 </div>

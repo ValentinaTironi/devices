@@ -1,18 +1,28 @@
-<h1>Device</h1>
-<div>
-  <div>
-    <p>Name:</p>
-    <%= @device.name %>
+<h1 class="text-center mt-4">Device</h1>
+<div class="col-md-6 offset-md-3 card mt-4">
+  <div class="card-header bg-transparent">
+    <div class="row">
+      <div class="col-sm-7">
+        <h4><%= @device.name %></h4>
+      </div>
+      <div class="col-sm-2 offset-sm-3 mt-1">
+        <i><%= link_to '<i class="ion-edit">'.html_safe, edit_device_path, class: "float-right" %></i>
+      </div>
+    </div>
   </div>
-
-  <div>
-    <p>Mac address</p>
-    <%= @device.mac_address%>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <dt><label>Mac address:</label></dt>
+      <%= @device.mac_address%>
+    </li>
+    <li class="list-group-item">
+      <dt><label>Code:</label></dt>
+      <%= @device.code %>
+    </li>
+  </ul>
+  <div class="row card-footer bg-transparent">
+    <div class="col-sm-2">
+      <%= button_to('back', devices_path, method: :get, class: "btn btn-outline-dark") %>
+    </div>
   </div>
-
-  <div>
-    <p>Code:</p>
-    <%= @device.code %>
-  </div>
-  <%= link_to 'Back', devices_path %>
 </div>

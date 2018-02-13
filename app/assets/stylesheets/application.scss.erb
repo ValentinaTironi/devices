@@ -13,3 +13,34 @@
  *= require_tree .
  *= require_self
  */
+@import 'bootstrap';
+@import 'ionicons';
+
+$green_sheen: #17a2b8;
+$shadow_blue: #7389AE;
+$pastel_blue: #B5BAD0;
+$platinum: #E0E0E2;
+$light_slate: #7B8996;
+
+th {
+  color: $green_sheen;
+}
+
+a {
+  color: $shadow_blue;
+}
+
+label {
+  color: $green_sheen;
+}
+
+h4 {
+  font-weight: bold;
+  color: $light_slate;
+}
+
+@media screen and (max-width: 575px) {
+  .new-button {
+    margin-bottom: 10px;
+  }
+}

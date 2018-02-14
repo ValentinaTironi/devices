@@ -36,6 +36,7 @@ gem 'activerecord', '~> 5.0', '>= 5.0.0.1'
 # gem 'capistrano-rails', group: :development
 gem 'bootstrap', '~> 4.0.0.beta2.1'
 gem 'ionicons-rails'
+gem 'dynamic_form'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

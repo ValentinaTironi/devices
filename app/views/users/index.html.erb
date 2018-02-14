@@ -1,10 +1,10 @@
 <div class="row mt-4">
   <div class="col-sm-10">
-    <h1 class="text-center background">Devices</h1>
+    <h1 class="text-center background">Users</h1>
   </div>
   <div class="col-sm-2 mt-2">
     <%= button_to('New',
-          new_user_device_url(@user.id),
+          new_user_path,
           method: :get,
           class: "btn btn-outline-info float-right new-button") %>
   </div>
@@ -12,21 +12,20 @@
 <div class="table-responsive">
   <table class="table table-hover table-sm">
     <thead class="thead">
-      <th>Name</th>
-      <th>Mac address</th>
-      <th>Code</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Devices count</th>
       <th></th>
       <th></th>
       <th></th>
     </thead>
 
-    <% @user.devices.each do |d| %>
+    <% @users.each do |u| %>
       <tr>
-        <td><%= d.name %></td>
-        <td><%= d.mac_address %></td>
-        <td><%= d.code.truncate(15) %></td>
-        <td><%= link_to '<i class="ion-eye">'.html_safe, user_device_url(@user.id, d) %></td>
-      </tr>
+        <td><%= u.first_name %></td>
+        <td><%= u.last_name %></td>
+        <td><%= u.devices.count %></td>
+        <td><%= link_to '<i class="ion-eye">'.html_safe, user_path(u) %></td>
     <% end %>
   </table>
 </div>

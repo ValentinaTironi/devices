@@ -17,7 +17,7 @@ describe DevicesController, 'Devices Controller' do
     it { expect(response).to have_http_status(:success) }
 
     it 'get all devices' do
-      expect(assigns(:devices)).to match_array(devices)
+      expect(assigns(:devices)).to match_array(user.devices)
     end
 
     it 'renders the :index view' do
@@ -27,9 +27,9 @@ describe DevicesController, 'Devices Controller' do
 
   describe 'GET #show' do
 
-    context 'valid id' do
+    context 'valid id and user' do
 
-      subject { create(:device, :name_valid) }
+      subject { create(:device, :name_valid, user: user) }
 
       before do
         get :show, params: { id: subject.id, user_id: user.id }
@@ -58,10 +58,32 @@ describe DevicesController, 'Devices Controller' do
         expect(response).to have_http_status(:not_found)
       end
 
-      it 'renders the show template' do
+      it 'renders page error' do
         expect(response).to render_template('not_found')
       end
 
+    end
+
+    context 'invalid user' do
+
+      let(:user_invalid) { create(:other_user) }
+
+      let!(:device) { create(:device, :name_valid, user: user) }
+
+      let(:delete_device) {
+        delete :destroy,
+        params: { id: device.id, user_id: user_invalid.id }
+      }
+
+      it 'redirects to page error' do
+        delete_device
+        expect(response).to render_template('not_found')
+      end
+
+      it 'return 404 status (notfound)' do
+        delete_device
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
@@ -84,9 +106,9 @@ describe DevicesController, 'Devices Controller' do
 
   describe 'GET #edit' do
 
-    context 'valid id' do
+    context 'valid id and user' do
 
-      subject { create(:device, :name_valid) }
+      subject { create(:device, :name_valid, user: user) }
 
       before do
         get :edit, params: { id: subject.id, user_id: user.id }
@@ -119,6 +141,28 @@ describe DevicesController, 'Devices Controller' do
         expect(response).to render_template('not_found')
       end
 
+    end
+
+    context 'invalid user' do
+
+      let(:user_invalid) { create(:other_user) }
+
+      let!(:device) { create(:device, :name_valid, user: user) }
+
+      let(:delete_device) {
+        delete :destroy,
+        params: { id: device.id, user_id: user_invalid.id }
+      }
+
+      it 'redirects to page error' do
+        delete_device
+        expect(response).to render_template('not_found')
+      end
+
+      it 'return 404 status (notfound)' do
+        delete_device
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 
@@ -171,7 +215,7 @@ describe DevicesController, 'Devices Controller' do
 
   describe 'PUT #update' do
 
-    subject { create(:device, :name_valid) }
+    subject { create(:device, :name_valid, user: user) }
 
     context 'valid attributes' do
 
@@ -227,22 +271,50 @@ describe DevicesController, 'Devices Controller' do
 
   describe 'DELETE #destroy' do
 
-    let!(:device) { create(:device, :name_valid) }
+    context 'valid user' do
+      let!(:device) { create(:device, :name_valid, user: user) }
 
-    let(:delete_device) { delete :destroy, params: { id: device.id, user_id: user.id } }
+      let(:delete_device) { delete :destroy, params: { id: device.id, user_id: user.id } }
 
-    it 'delete device success' do
-      expect { delete_device }.to change(device_class, :count).by(-1)
+      it 'delete device success' do
+        expect { delete_device }.to change(device_class, :count).by(-1)
+      end
+
+      it 'redirects to devices#index' do
+        delete_device
+        expect(response).to redirect_to user_devices_url(user.id)
+      end
+
+      it 'return 302 status (found)' do
+        delete_device
+        expect(response).to have_http_status(:found)
+      end
     end
 
-    it 'redirects to devices#index' do
-      delete_device
-      expect(response).to redirect_to user_devices_url(user.id)
-    end
+    context 'invalid user' do
 
-    it 'return 302 status (found)' do
-      delete_device
-      expect(response).to have_http_status(:found)
+      let(:user_invalid) { create(:other_user) }
+
+      let!(:device) { create(:device, :name_valid, user: user) }
+
+      let(:delete_device) {
+        delete :destroy,
+        params: { id: device.id, user_id: user_invalid.id }
+      }
+
+      it 'does not delete device' do
+        expect { delete_device }.to change(device_class, :count).by(0)
+      end
+
+      it 'redirects to page error' do
+        delete_device
+        expect(response).to render_template('not_found')
+      end
+
+      it 'return 404 status (notfound)' do
+        delete_device
+        expect(response).to have_http_status(:not_found)
+      end
     end
   end
 end

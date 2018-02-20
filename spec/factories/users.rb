@@ -12,7 +12,7 @@ FactoryBot.define do
     trait :name_invalid do
       first_name nil
     end
-
   end
 
+  factory :other_user, parent: :user do; end
 end

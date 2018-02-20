@@ -4,7 +4,7 @@ class DevicesController < ApplicationController
 
 
   def index
-    @devices = Device.all
+    @devices = @user.devices
   end
 
   def show; end
@@ -44,7 +44,7 @@ class DevicesController < ApplicationController
   end
 
   def find_device
-    @device = Device.find(params[:id])
+    @device = @user.devices.find(params[:id])
   end
 
   def get_user

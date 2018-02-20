@@ -2,26 +2,26 @@
 <div class="col-md-6 offset-md-3 card mt-4">
   <div class="card-header bg-transparent">
     <div class="row">
-      <div class="col-sm-7">
+      <div class="col-sm-11">
         <h4><%= @user.first_name %> <%= @user.last_name %></h4>
+      </div>
+      <div class="col-sm-1 float-right mt-1">
+        <i><%= link_to '<i class="ion-edit">'.html_safe, edit_user_url(@user.id) %></i>
       </div>
     </div>
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
       <dt><label>Email</label></dt>
-      <%= @user.email%>
+      <%= @user.email %>
     </li>
     <li class="list-group-item">
-      <%= button_to('New',
-            new_user_device_url(@user.id),
-            method: :get,
-            class: "btn btn-outline-info float-right new-button") %>
-      <dt><label>Devices</label></dt>
-        <% @user.devices.each do |d| %>
-            <tr>
-              <td><%= d.name %></td><br>
-        <% end %>
+      <%= render file: "users/user_devices_list" %>
     </li>
   </ul>
+  <div class="row card-footer bg-transparent">
+    <div class="col-sm-2">
+      <%= button_to('back', users_path, method: :get, class: "btn btn-outline-dark") %>
+    </div>
+  </div>
 </div>

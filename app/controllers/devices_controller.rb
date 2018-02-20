@@ -1,6 +1,6 @@
 class DevicesController < ApplicationController
+  before_action :get_user, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   before_action :find_device, only: [:show, :edit, :update, :destroy]
-  before_action :get_user, only: [:index, :show, :new, :create]
 
 
   def index
@@ -26,7 +26,7 @@ class DevicesController < ApplicationController
 
   def update
     if @device.update(device_params)
-      redirect_to @device
+      redirect_to user_device_url(@user.id, @device.id)
     else
       render 'edit', status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class DevicesController < ApplicationController
 
   def destroy
     @device.destroy!
-    redirect_to devices_path
+    redirect_to user_devices_url(@user.id)
   end
 
   private

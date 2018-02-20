@@ -3,7 +3,7 @@
     <h1>Edit device</h1>
   </div>
   <div class="card-body">
-    <%= form_for @device do |d| %>
+    <%= form_for(@device, url: user_device_url(@user))  do |d| %>
 
       <div class="form-group">
         <label class="font-weight-bold">Name: </label>
@@ -18,7 +18,7 @@
       <div class="float-right row">
         <%= d.submit 'Save', class: "btn btn-outline-info" %>
     <% end %>
-    <%= button_to('Cancel', devices_path, method: :get, class: "btn btn-outline-danger ml-1") %>
+    <%= button_to('Cancel', user_devices_path, method: :get, class: "btn btn-outline-danger ml-1") %>
       </div>
   </div>
 </div>

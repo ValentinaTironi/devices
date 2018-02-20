@@ -178,7 +178,11 @@ describe DevicesController, 'Devices Controller' do
       let(:attributes) { { name: 'new name', mac_address: 111 } }
 
       before do
-        patch :update, params: { id: subject.id, device: attributes }
+        patch :update, params: {
+          id: subject.id,
+          device: attributes,
+          user_id: user.id
+         }
       end
 
       it 'update data success' do
@@ -195,7 +199,7 @@ describe DevicesController, 'Devices Controller' do
       end
 
       it 'redirects to the device' do
-        expect(:device).to redirect_to(subject)
+        expect(:device).to redirect_to(user_device_url(user.id, subject))
       end
     end
 
@@ -204,7 +208,11 @@ describe DevicesController, 'Devices Controller' do
       let(:attributes) { { name: 'new name', mac_address: nil } }
 
       before do
-        patch :update, params: { id: subject.id, device: attributes }
+        patch :update, params: {
+          id: subject.id,
+          device: attributes,
+          user_id: user.id
+         }
       end
 
       it 'renders to edit template' do
@@ -217,11 +225,11 @@ describe DevicesController, 'Devices Controller' do
     end
   end
 
-  describe 'DELETE destroy' do
+  describe 'DELETE #destroy' do
 
     let!(:device) { create(:device, :name_valid) }
 
-    let(:delete_device) { delete :destroy, params: { id: device.id } }
+    let(:delete_device) { delete :destroy, params: { id: device.id, user_id: user.id } }
 
     it 'delete device success' do
       expect { delete_device }.to change(device_class, :count).by(-1)
@@ -229,7 +237,7 @@ describe DevicesController, 'Devices Controller' do
 
     it 'redirects to devices#index' do
       delete_device
-      expect(response).to redirect_to devices_path
+      expect(response).to redirect_to user_devices_url(user.id)
     end
 
     it 'return 302 status (found)' do

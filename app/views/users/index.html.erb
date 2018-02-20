@@ -12,9 +12,9 @@
 <div class="table-responsive">
   <table class="table table-hover table-sm">
     <thead class="thead">
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Devices count</th>
+      <th class="text-center">First name</th>
+      <th class="text-center">Last name</th>
+      <th class="text-center">Devices</th>
       <th></th>
       <th></th>
       <th></th>
@@ -24,8 +24,14 @@
       <tr>
         <td><%= u.first_name %></td>
         <td><%= u.last_name %></td>
-        <td><%= u.devices.count %></td>
+        <td class="text-center"><%= u.devices.count %>
+            <%= link_to '<i class="ion-navicon-round">'.html_safe, user_devices_url(u) %></td>
         <td><%= link_to '<i class="ion-eye">'.html_safe, user_path(u) %></td>
+        <td><%= link_to '<i class="ion-edit">'.html_safe, edit_user_url(u) %></td>
+          <td><%= link_to '<i class="ion-trash-a">'.html_safe,
+                    user_path(u),
+                    method: :delete,
+                    data: { confirm: 'Are you sure?' } %></td>
     <% end %>
   </table>
 </div>

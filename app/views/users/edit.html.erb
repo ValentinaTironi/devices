@@ -1,0 +1,29 @@
+<div class="col-md-6 offset-md-3 card mt-4">
+  <div class="card-header bg-transparent">
+    <h1>Edit user</h1>
+  </div>
+  <div class="card-body">
+    <%= form_for @user do |u| %>
+
+      <div class="form-group">
+        <label class="font-weight-bold">First name: </label>
+        <%= u.text_field :first_name, class: "form-control"%>
+      </div>
+
+      <div class="form-group">
+        <label class="font-weight-bold">Last name: </label>
+        <%= u.text_field :last_name, class: "form-control"%>
+      </div>
+
+      <div class="form-group">
+        <label class="font-weight-bold">Email: </label>
+        <%= u.text_field :email, class: "form-control"%>
+      </div>
+
+      <div class="float-right row">
+        <%= u.submit 'Save', class: "btn btn-outline-info" %>
+    <% end %>
+    <%= button_to('Cancel', users_path, method: :get, class: "btn btn-outline-danger ml-1") %>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<h1 class="text-center mt-4">User</h1>
+<div class="col-md-6 offset-md-3 card mt-4">
+  <div class="card-header bg-transparent">
+    <div class="row">
+      <div class="col-sm-7">
+        <h4><%= @user.first_name %> <%= @user.last_name %></h4>
+      </div>
+    </div>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">
+      <dt><label>Email</label></dt>
+      <%= @user.email%>
+    </li>
+    <li class="list-group-item">
+      <%= button_to('New',
+            new_user_device_url(@user.id),
+            method: :get,
+            class: "btn btn-outline-info float-right new-button") %>
+      <dt><label>Devices</label></dt>
+        <% @user.devices.each do |d| %>
+            <tr>
+              <td><%= d.name %></td><br>
+        <% end %>
+    </li>
+  </ul>
+</div>

@@ -3,13 +3,15 @@ require 'rails_helper'
 describe DevicesController, 'Devices Controller' do
 
   let(:device_class) { Device }
+  let(:user) { create(:user) }
+
 
   describe 'GET #index' do
 
     let(:devices) { [create(:device, :name_valid)] }
 
     before do
-      get :index
+      get :index, params: { user_id: user.id }
     end
 
     it { expect(response).to have_http_status(:success) }
@@ -30,7 +32,7 @@ describe DevicesController, 'Devices Controller' do
       subject { create(:device, :name_valid) }
 
       before do
-        get :show, params: { id: subject.id }
+        get :show, params: { id: subject.id, user_id: user.id }
       end
 
       it { expect(response).to have_http_status(:success) }
@@ -49,7 +51,7 @@ describe DevicesController, 'Devices Controller' do
       let(:id) { 'invalid_id' }
 
       before do
-        get :show, params: { id: id }
+        get :show, params: { id: id, user_id: user.id }
       end
 
       it 'return a error' do
@@ -66,7 +68,7 @@ describe DevicesController, 'Devices Controller' do
   describe 'GET #new' do
 
     before do
-      get :new
+      get :new, params: { user_id: user.id }
     end
 
     it { expect(response).to have_http_status(:success) }
@@ -87,7 +89,7 @@ describe DevicesController, 'Devices Controller' do
       subject { create(:device, :name_valid) }
 
       before do
-        get :edit, params: { id: subject.id }
+        get :edit, params: { id: subject.id, user_id: user.id }
       end
 
       it { expect(response).to have_http_status(:success) }
@@ -106,7 +108,7 @@ describe DevicesController, 'Devices Controller' do
       let(:id) { 'invalid_id' }
 
       before do
-        get :edit, params: { id: id }
+        get :edit, params: { id: id, user_id: user.id }
       end
 
       it 'return a error' do
@@ -127,16 +129,16 @@ describe DevicesController, 'Devices Controller' do
       let(:device) { attributes_for(:device, :name_valid) }
 
       before do
-        post :create, params: { device: device }
+        post :create, params: { device: device, user_id: user.id }
       end
 
       it 'creates a new device' do
-        expect { post :create, params: { device: device } }
+        expect { post :create, params: { device: device, user_id: user.id } }
           .to change(device_class, :count).by(1)
       end
 
       it 'redirects to the new device' do
-        expect(:device).to redirect_to(device_class.last)
+        expect(:device).to redirect_to(user_device_url(user.id, device_class.last))
       end
 
       it 'return 302 status' do
@@ -149,16 +151,16 @@ describe DevicesController, 'Devices Controller' do
       let(:invalid_device) { attributes_for(:device, :name_invalid) }
 
       before do
-        post :create, params: { device: invalid_device }
+        post :create, params: { device: invalid_device, user_id: user.id }
       end
 
       it 'does not create a new device' do
-        expect { post :create, params: { device: invalid_device } }
+        expect { post :create, params: { device: invalid_device, user_id: user.id } }
           .to change(device_class, :count).by(0)
       end
 
       it 'renders to new template' do
-        expect(response).to render_template('new')
+        expect(response).to render_template(:new)
       end
 
       it 'return 422 status' do

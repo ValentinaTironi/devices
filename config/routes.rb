@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
-  resources :devices
-
-  root 'devices#index'
+  resources :users do
+      resources :devices
+    end
+  root 'users#index'
 end

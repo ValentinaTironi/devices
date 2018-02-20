@@ -1,5 +1,7 @@
 class DevicesController < ApplicationController
   before_action :find_device, only: [:show, :edit, :update, :destroy]
+  before_action :get_user, only: [:index, :show, :new, :create]
+
 
   def index
     @devices = Device.all
@@ -14,9 +16,9 @@ class DevicesController < ApplicationController
   def edit; end
 
   def create
-    @device = Device.new(device_params)
+    @device = @user.devices.create(device_params)
     if @device.save
-      redirect_to @device
+      redirect_to user_device_url(@user.id, @device.id)
     else
       render 'new', status: :unprocessable_entity
     end
@@ -38,10 +40,14 @@ class DevicesController < ApplicationController
   private
 
   def device_params
-    params.require(:device).permit(:name, :mac_address)
+    params.require(:device).permit(:name, :mac_address, :user_id)
   end
 
   def find_device
     @device = Device.find(params[:id])
+  end
+
+  def get_user
+    @user = User.find(params[:user_id])
   end
 end

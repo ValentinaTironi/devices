@@ -20,13 +20,19 @@
       <th></th>
     </thead>
 
-    <% @user.devices.each do |d| %>
+    <% @devices.each do |d| %>
       <tr>
         <td><%= d.name %></td>
         <td><%= d.mac_address %></td>
         <td><%= d.code.truncate(15) %></td>
-        <td><%= link_to '<i class="ion-eye">'.html_safe, user_device_url(@user.id, d) %></td>
+        <td><%= link_to '<i class="ion-eye">'.html_safe, user_device_url(d.user_id, d) %></td>
+        <td><%= link_to '<i class="ion-edit">'.html_safe, edit_user_device_url(d.user_id, d) %></td>
+        <td><%= link_to '<i class="ion-trash-a">'.html_safe,
+                  user_device_url(d.user_id, d),
+                  method: :delete,
+                  data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </table>
+  <%= button_to('back', root_path, method: :get, class: "btn btn-outline-dark") %>
 </div>

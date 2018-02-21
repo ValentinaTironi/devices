@@ -1,0 +1,15 @@
+<div>
+  <dt><label>Devices</label>
+  <i><%= link_to '<i class="ion-android-add-circle">'.html_safe,
+          new_user_device_path(@user.id),
+          { class: "float-right" } %></i>
+</div>
+<div class="row">
+  <ul class="pl-3 container">
+    <% @user.devices.each do |d| %>
+    <li>
+      <%= link_to d.name, user_device_url(@user.id, d), class: "badge badge-light"%>
+    </li>
+    <% end %>
+  </ul>
+</div>

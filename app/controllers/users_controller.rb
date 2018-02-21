@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :find_user, only: [:show]
+  before_action :find_user, only: [:show, :edit, :update, :destroy]
 
   def index
     @users = User.all
@@ -11,6 +11,8 @@ class UsersController < ApplicationController
     @user = User.new
   end
 
+  def edit; end
+
   def create
     @user = User.new(user_params)
     if @user.save
@@ -18,6 +20,19 @@ class UsersController < ApplicationController
     else
       render 'new', status: :unprocessable_entity
     end
+  end
+
+  def update
+    if @user.update(user_params)
+      redirect_to user_path
+    else
+      render 'edit', status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @user.destroy!
+    redirect_to users_path
   end
 
   private

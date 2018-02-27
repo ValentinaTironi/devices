@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   end
 
   namespace :api, defaults: { format: 'json' } do
-    post :login, to: 'login#show'
+    post :users, to: 'users#login'
   end
 
   root 'users#index'

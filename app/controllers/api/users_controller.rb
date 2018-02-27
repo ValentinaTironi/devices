@@ -1,6 +1,11 @@
-class Api::LoginController < Api::ApplicationController
+class Api::UsersController < Api::ApplicationController
+  before_action :find_user
 
-  require 'jwt'
+  def login
+    render json: { access_token: encode(user_payload) }
+  end
+
+  private
 
   def encode(payload)
     JWT.encode(payload, Rails.application.secrets.secret_key_base)
@@ -10,16 +15,9 @@ class Api::LoginController < Api::ApplicationController
     JWT.decode(token, Rails.application.secrets.secret_key_base)
   end
 
-  def data
-    find_user
-    data = { data: {email: @user.email } }
+  def user_payload
+    { data: { email: @user.email } }
   end
-
-  def show
-    render json: { access_token: encode(data) }
-  end
-
-  private
 
   def find_user
     @user = User.find_by_email!(params[:email])

@@ -31,8 +31,6 @@ gem 'activerecord', '~> 5.0', '>= 5.0.0.1'
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
-# gem 'json', '~> 1.8', '>= 1.8.3'
-gem 'json'
 gem 'jwt'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

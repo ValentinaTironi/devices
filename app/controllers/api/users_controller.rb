@@ -1,5 +1,4 @@
 class Api::UsersController < Api::ApplicationController
-  before_action :find_user
 
   def login
     render json: { access_token: encode(user_payload) }
@@ -16,10 +15,6 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def user_payload
-    { data: { email: @user.email } }
-  end
-
-  def find_user
-    @user = User.find_by_email!(params[:email])
+    { data: { email: current_user.email } }
   end
 end

@@ -1,20 +1,20 @@
 require 'rails_helper'
 
-describe ReadingsController do
+describe Api::ReadingsController do
 
   let(:reading_class) { Reading }
   let(:device) { create(:device, :name_valid) }
-
   describe 'POST #create' do
-
 
     context 'with valid attributes' do
 
       let(:reading) { attributes_for(:reading, :value_valid) }
 
       before do
+        request.env['jwt.payload'] = { "data" => { "email" => device.user.email } }
         post :create, params: { reading: reading, device_id: device.id }
       end
+
 
       it 'creates a new reading' do
         expect { post :create, params: { reading: reading, device_id: device.id } }
@@ -31,6 +31,7 @@ describe ReadingsController do
       let(:invalid_reading) { attributes_for(:reading, :value_invalid) }
 
       before do
+        request.env['jwt.payload'] = { "data" => { "email" => device.user.email } }
         post :create, params: { reading: invalid_reading, device_id: device.id }
       end
 

@@ -8,8 +8,8 @@ class Api::ReadingsController < Api::ApplicationController
       render json: @reading
     else
       render json: @reading.errors.full_messages, status: :bad_request
+    end
   end
-end
 
   private
 
@@ -17,7 +17,12 @@ end
     params.require(:reading).permit(:value, :date)
   end
 
+  def user
+    data = request.env['jwt.payload']
+    User.find_by_email(data['data']['email'])
+  end
+
   def device
-    Device.find(params[:device_id])
+    user.devices.find(params[:device_id])
   end
 end
